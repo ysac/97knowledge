@@ -86,20 +86,23 @@ if __name__ == "__main__":
     reader = csv.reader(f)
 
     # 先頭行はメインタイトル
-    main_title = reader.next()[1]
+    main_title = reader.next()[0]
 
     line_count = 0
     for row in reader:
         line_count += 1
-        if line_count == article_count:
-            title = row[0] + ". " + row[1]
-            url = str(shorten_url(google_api_key, row[2]))
+        if line_count != article_count:
+            continue
+        title = row[0]
+        if len(row) == 2:
+            short_url = str(shorten_url(google_api_key, row[1]))
+        else:
+            short_url = ''
+        message = '[info][title]' + main_title + '[/title]' + title + ' ' + short_url + '[/info]'
+        send_chatwork(chatwork_room_id, chatwork_token, message)
     f.close()
 
     if article_count == line_count:
         reset_counter(counter_file, 1)
     else:
         update_counter(counter_file)
-
-    message = '[info][title]今日の「' + main_title + '」(coffee)[/title]' + title + ' ' + url + '[/info]'
-    send_chatwork(chatwork_room_id, chatwork_token, message)
