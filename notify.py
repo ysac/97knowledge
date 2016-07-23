@@ -15,7 +15,7 @@ CHATWORK_API_URL = 'https://api.chatwork.com/v1/rooms/'
 def shorten_url(api_key, long_url):
     api_url = GOOGLE_API_URL + api_key
     long_url = long_url.encode('utf-8')
-    body = '{longUrl: "%s"}' % (long_url)
+    body = '{longUrl: "%s"}' % long_url
     headers = {'Content-Type': 'application/json'}
     req = requests.session()
     res = req.post(api_url, data=body, headers=headers)
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     env_file = cwd + '/.env'
 
     if not os.path.isfile(env_file):
-        print 'ERROR: %s is not found' % (env_file)
+        print 'ERROR: %s is not found' % env_file
         quit()
 
     config = ConfigParser.SafeConfigParser()
@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     csv_file = cwd + '/' + csv_filename
     if not os.path.isfile(csv_file):
-        print 'ERROR: %s is not found' % (csv_file)
+        print 'ERROR: %s is not found' % csv_file
         quit()
 
     name, ext = os.path.splitext(csv_filename)
@@ -101,5 +101,5 @@ if __name__ == "__main__":
     else:
         update_counter(counter_file)
 
-    message = '[info][title]今日の ' + main_title + '[/title]' + title + ' ' + url + '[/info]'
+    message = '[info][title]今日の「' + main_title + '」(coffee)[/title]' + title + ' ' + url + '[/info]'
     send_chatwork(chatwork_room_id, chatwork_token, message)
